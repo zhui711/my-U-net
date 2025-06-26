@@ -1,1 +1,40 @@
-þ
+# Anaconda Installers
+Anaconda3-*.sh
+Anaconda3-*.sh.*
+
+# Archives
+*.rar
+*.zip
+*.tar.gz
+
+# Datasets (if any other than liver.rar)
+data/
+datasets/
+
+# Models (if any)
+models/
+checkpoints/
+*.pth
+*.h5
+
+# Python virtual environment
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+
+# IDE specific
+.vscode/
+.idea/
+.cursor/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS generated files
+.DS_Store
+Thumbs.dbþ
