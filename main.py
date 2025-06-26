@@ -21,6 +21,8 @@ from torchvision.transforms import transforms
 from plot import loss_plot
 from plot import metrics_plot
 from torchvision.models import vgg16
+import os
+
 def getArgs():
     parse = argparse.ArgumentParser()
     parse.add_argument('--deepsupervision', default=0)
@@ -103,12 +105,31 @@ def getDataset(args):
         test_dataset = CornealDataset(r"test", transform=x_transforms, target_transform=y_transforms)
         test_dataloaders = DataLoader(test_dataset, batch_size=1)
     if args.dataset == 'driveEye':
-        train_dataset = DriveEyeDataset(r'train', transform=x_transforms, target_transform=y_transforms)
+        # 检查数据路径
+        base_path = os.path.join(os.getcwd(), 'data', 'driveEye')
+        train_path = os.path.join(base_path, 'train')
+        val_path = os.path.join(base_path, 'val')
+        test_path = os.path.join(base_path, 'test')
+        
+        print(f"检查数据路径:")
+        print(f"训练集路径: {train_path} - 存在: {os.path.exists(train_path)}")
+        print(f"验证集路径: {val_path} - 存在: {os.path.exists(val_path)}")
+        print(f"测试集路径: {test_path} - 存在: {os.path.exists(test_path)}")
+        
+        train_dataset = DriveEyeDataset(train_path, transform=x_transforms, target_transform=y_transforms)
         train_dataloaders = DataLoader(train_dataset, batch_size=args.batch_size)
-        val_dataset = DriveEyeDataset(r"val", transform=x_transforms, target_transform=y_transforms)
+        print(f"训练集大小: {len(train_dataset)}")
+        
+        val_dataset = DriveEyeDataset(val_path, transform=x_transforms, target_transform=y_transforms)
         val_dataloaders = DataLoader(val_dataset, batch_size=1)
-        test_dataset = DriveEyeDataset(r"test", transform=x_transforms, target_transform=y_transforms)
+        print(f"验证集大小: {len(val_dataset)}")
+        
+        test_dataset = DriveEyeDataset(test_path, transform=x_transforms, target_transform=y_transforms)
         test_dataloaders = DataLoader(test_dataset, batch_size=1)
+        print(f"测试集大小: {len(test_dataset)}")
+        
+        if len(val_dataset) == 0:
+            raise ValueError("验证集为空！请检查验证集数据路径和文件是否正确。")
     if args.dataset == 'isbiCell':
         train_dataset = IsbiCellDataset(r'train', transform=x_transforms, target_transform=y_transforms)
         train_dataloaders = DataLoader(train_dataset, batch_size=args.batch_size)
@@ -267,7 +288,11 @@ def test(val_dataloaders,save_predict=False):
                     saved_predict = '.'+saved_predict.split('.')[1] + '.tif'
                     plt.savefig(saved_predict)
                 else:
-                    plt.savefig(dir +'/'+ mask_path[0].split('\\')[-1])
+                    # 使用os.path.basename来正确提取文件名，兼容Linux和Windows
+                    filename = os.path.basename(mask_path[0])
+                    save_path = os.path.join(dir, filename)
+                    plt.savefig(save_path)
+                    plt.close()  # 关闭图形以释放内存
             #plt.pause(0.01)
             print('iou={},dice={}'.format(iou,dice))
             if i < num:i+=1   #处理验证集下一张图

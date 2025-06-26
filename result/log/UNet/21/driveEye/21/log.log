@@ -1,0 +1,30 @@
+2025-05-15 22:04:21,062:INFO:
+=======
+models:UNet,
+epoch:21,
+batch size:21
+dataset:driveEye
+========
+2025-05-15 22:04:21,101:INFO:Epoch 0/20
+2025-05-17 13:51:12,802:INFO:
+=======
+models:UNet,
+epoch:21,
+batch size:21
+dataset:driveEye
+========
+2025-05-17 13:51:13,522:INFO:Epoch 0/20
+2025-05-17 13:59:16,596:INFO:
+=======
+models:UNet,
+epoch:21,
+batch size:21
+dataset:driveEye
+========
+2025-06-25 20:31:59,253:INFO:
+=======
+models:UNet,
+epoch:21,
+batch size:21
+dataset:driveEye
+========

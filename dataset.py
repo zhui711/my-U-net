@@ -14,8 +14,8 @@ import imageio
 class LiverDataset(data.Dataset):
     def __init__(self, state, transform=None, target_transform=None):
         self.state = state
-        self.train_root = r"E:\codes\new\u_net_liver-master\data\liver\train"
-        self.val_root = r"E:\codes\new\u_net_liver-master\data\liver\val"
+        self.train_root = r"/home/zhui/UNET-ZOO/liver/train"
+        self.val_root = r"/home/zhui/UNET-ZOO/liver/val"
         self.test_root = self.val_root
         self.pics,self.masks = self.getDataPath()
         self.transform = transform
@@ -45,10 +45,10 @@ class LiverDataset(data.Dataset):
         #x_path, y_path = self.imgs[index]
         x_path = self.pics[index]
         y_path = self.masks[index]
-        origin_x = Image.open(x_path)
-        origin_y = Image.open(y_path)
         # origin_x = cv2.imread(x_path)
         # origin_y = cv2.imread(y_path,cv2.COLOR_BGR2GRAY)
+        origin_x = Image.open(x_path)
+        origin_y = Image.open(y_path)
         if self.transform is not None:
             img_x = self.transform(origin_x)
         if self.target_transform is not None:
@@ -214,7 +214,7 @@ class DriveEyeDataset(data.Dataset):
     def __init__(self, state, transform=None, target_transform=None):
         self.state = state
         self.aug = True
-        self.root = r'E:\datasets\DRIVE\DRIVE'
+        self.root = '/home/zhui/UNET-ZOO/data/driveEye'
         self.pics, self.masks = self.getDataPath()
         self.img_paths = None
         self.mask_paths = None
@@ -224,19 +224,21 @@ class DriveEyeDataset(data.Dataset):
         self.target_transform = target_transform
 
     def getDataPath(self):
-        self.train_img_paths = glob(self.root + r'\training\images\*')
-        self.train_mask_paths = glob(self.root + r'\training\1st_manual\*')
-        self.val_img_paths = glob(self.root + r'\test\images\*')
-        self.val_mask_paths = glob(self.root + r'\test\1st_manual\*')
-        self.test_img_paths = self.val_img_paths
-        self.test_mask_paths = self.val_mask_paths
-        assert self.state == 'train' or self.state == 'val' or self.state == 'test'
-        if self.state == 'train':
+        self.train_img_paths = glob(os.path.join(self.root, 'train', 'images', '*'))
+        self.train_mask_paths = glob(os.path.join(self.root, 'train', '1st_manual', '*'))
+        self.val_img_paths = glob(os.path.join(self.root, 'val', 'images', '*'))
+        self.val_mask_paths = glob(os.path.join(self.root, 'val', '1st_manual', '*'))
+        self.test_img_paths = glob(os.path.join(self.root, 'test', 'images', '*'))
+        self.test_mask_paths = glob(os.path.join(self.root, 'test', '1st_manual', '*'))
+        
+        if 'train' in self.state:
             return self.train_img_paths, self.train_mask_paths
-        if self.state == 'val':
+        elif 'val' in self.state:
             return self.val_img_paths, self.val_mask_paths
-        if self.state == 'test':
+        elif 'test' in self.state:
             return self.test_img_paths, self.test_mask_paths
+        else:
+            raise ValueError(f"Invalid state: {self.state}. Must contain 'train', 'val', or 'test'")
 
     def __getitem__(self, index):
         imgx,imgy=(576,576)
