@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # UNET-ZOO
 including unet,unet++,attention-unet,r2unet,cenet,segnet ,fcn.
 
@@ -55,3 +56,7 @@ keyword：f1ek
 the Esophagus and Esophagus Cancer dataset from First Affiliated Hospital of Sun Yat-sen University
 link：https://pan.baidu.com/s/10b5arIQjNpiggwdkgYNHXQ 
 keyword：hivm
+=======
+# my-U-net
+an assignment
+>>>>>>> d30fb2bb795d8e7864094a5a852e38ad9f36c480
